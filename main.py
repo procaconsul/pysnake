@@ -59,11 +59,15 @@ def game_loop():
       snake.move(grow=True)
     else:
         snake.move()
-    canvas.delete('all')
-    render_food(food)
-    render_snake(snake)
-    frame_updated = False
-    root.after(FRAME_RATE, game_loop)
+    if snake[-1] in snake[:-1]:
+      canvas.create_text(SCREEN_WIDTH/2, SCREEN_WIDTH/2,
+          fill='black',font='courier 80 bold', text='GAME OVER')
+    else:
+      canvas.delete('all')
+      render_food(food)
+      render_snake(snake)
+      frame_updated = False
+      root.after(FRAME_RATE, game_loop)
 
 def change_direction(event):
     global frame_updated
