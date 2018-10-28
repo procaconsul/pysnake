@@ -5,15 +5,17 @@ from snake import Snake
 
 root = tk.Tk()
 
-WIDTH, HEIGHT = 500, 500
+SCREEN_WIDTH = 500
 
 FRAME_RATE = 250
 TILE_WIDTH = 25
 
-canvas = tk.Canvas(root, width=WIDTH, height=HEIGHT)
+ENV_WIDTH = SCREEN_WIDTH / TILE_WIDTH
+
+canvas = tk.Canvas(root, width=SCREEN_WIDTH, height=SCREEN_WIDTH)
 canvas.pack()
 
-snake = Snake((WIDTH/TILE_WIDTH/2, HEIGHT/TILE_WIDTH/2))
+snake = Snake((ENV_WIDTH / 2, ENV_WIDTH / 2), ENV_WIDTH)
 
 def render_snake(snake):
     for x, y in snake.body:
