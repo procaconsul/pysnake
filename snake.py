@@ -7,6 +7,14 @@ class Direction(Enum):
     SOUTH='south'
     WEST='west'
 
+DIRECTION_VECTOR = {
+    Direction.NORTH: (0, -1),
+    Direction.SOUTH: (0, 1),
+    Direction.EAST: (1, 0),
+    Direction.WEST: (-1, 0),
+}
+
+
 class Snake:
     def __init__(self, coords, env_width):
         self.body = deque()
@@ -17,7 +25,8 @@ class Snake:
     def move(self):
         tail = self.body.popleft()
         x, y = self.body[-1] if len(self.body) else tail
-        if self.direction == Direction.EAST:
-            self.body.append(((x + 1) % self.env_width, y))
+        d_x, d_y = DIRECTION_VECTOR[self.direction]
+        self.body.append(((x + d_x) % self.env_width,
+                          (y + d_y) % self.env_width))
        
 
