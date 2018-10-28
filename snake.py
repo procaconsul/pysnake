@@ -1,13 +1,7 @@
 import pdb
 from collections import deque
-from enum import Enum
 
-class Direction(Enum):
-    NORTH = 1
-    EAST  = 2
-    SOUTH = -1
-    WEST  = -2
-
+from utils import Direction, Point
 
 DIRECTION_VECTOR = {
     Direction.NORTH: (0, -1),
@@ -37,5 +31,5 @@ class Snake:
         tail = self.body.popleft()
         x, y = self.body[-1] if len(self.body) else tail
         d_x, d_y = DIRECTION_VECTOR[self.direction]
-        self.body.append(((x + d_x) % self.env_width,
+        self.body.append(Point((x + d_x) % self.env_width,
                           (y + d_y) % self.env_width))
