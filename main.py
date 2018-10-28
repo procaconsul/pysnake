@@ -44,8 +44,6 @@ def render_point(point, color):
                           fill=color,
                           outline='white')
 
-   
-
 def render_food(food):
     render_point(food, 'red')
     
@@ -55,9 +53,11 @@ def render_snake(snake):
 
 def game_loop():
     global food 
-    snake.move()
     if food in snake:
       food = food_location(snake)
+      snake.move(grow=True)
+    else:
+        snake.move()
     canvas.delete('all')
     render_food(food)
     render_snake(snake)

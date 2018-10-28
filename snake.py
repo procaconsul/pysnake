@@ -27,8 +27,8 @@ class Snake:
         if new_direction.value + self.direction.value:
           self.direction = new_direction
 
-    def move(self):
-        tail = self.body.popleft()
+    def move(self, grow=False):
+        tail = self.body[0] if grow else self.body.popleft()
         x, y = self.body[-1] if len(self.body) else tail
         d_x, d_y = DIRECTION_VECTOR[self.direction]
         self.body.append(Point((x + d_x) % self.env_width,
