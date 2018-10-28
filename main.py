@@ -78,7 +78,7 @@ def game_loop():
                                   text=GAME_OVER_MSG)
         text_frame = canvas.create_rectangle(canvas.bbox(text), 
                                              fill='white', 
-                                             outlint='white')
+                                             outline='white')
         canvas.tag_lower(text_frame, text)
 
     else:
