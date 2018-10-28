@@ -1,10 +1,8 @@
-import pdb
 import tkinter as tk
 from random import randint
 
 from snake import Snake
 from utils import Direction, Point
-
 
 SCREEN_WIDTH = 500
 FRAME_RATE = 150
@@ -45,7 +43,7 @@ def render_point(point, color):
 
 def render_food(food):
     render_point(food, 'red')
-    
+
 def render_snake(snake):
     render_point(snake[-1], 'blue')
     for point in snake[:-1]:
@@ -59,10 +57,11 @@ def game_loop():
       snake.move(grow=True)
     else:
         snake.move()
-        
+
     if snake[-1] in snake[:-1]:
       canvas.create_text(SCREEN_WIDTH/2, SCREEN_WIDTH/2,
-          fill='black',font='courier 80 bold', text=GAME_OVER_MSG)
+                         fill='black',font='courier 80 bold',
+                         text=GAME_OVER_MSG)
     else:
       canvas.delete('all')
       render_food(food)
