@@ -32,3 +32,8 @@ class Snake:
         d_x, d_y = DIRECTION_VECTOR[self.direction]
         self.body.append(Point((x + d_x) % self.env_width,
                           (y + d_y) % self.env_width))
+
+
+    @property
+    def tail(self):
+        return self[:-1]

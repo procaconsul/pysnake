@@ -47,19 +47,19 @@ def increment_score():
     score_var.set(f"Score: {score}")
 
 def render_point(point, color):
-  coord_x, coord_y = point.x * TILE_WIDTH, point.y * TILE_WIDTH
-  canvas.create_rectangle(coord_x, coord_y,
-                          coord_x + TILE_WIDTH,
-                          coord_y + TILE_WIDTH,
-                          fill=color,
-                          outline='white')
+    coord_x, coord_y = point.x * TILE_WIDTH, point.y * TILE_WIDTH
+    canvas.create_rectangle(coord_x, coord_y,
+                            coord_x + TILE_WIDTH,
+                            coord_y + TILE_WIDTH,
+                            fill=color,
+                            outline='white')
 
 def render_food(food):
     render_point(food, 'red')
 
 def render_snake(snake):
     render_point(snake[-1], 'blue')
-    for point in snake[:-1]:
+    for point in snake.tail:
         render_point(point, 'black')
 
 def game_loop():
@@ -72,16 +72,21 @@ def game_loop():
     else:
         snake.move()
 
-    if snake[-1] in snake[:-1]:
-      canvas.create_text(SCREEN_WIDTH/2, SCREEN_WIDTH/2,
-                         fill='black',font='courier 80 bold',
-                         text=GAME_OVER_MSG)
+    if snake[-1] in snake.tail:
+        text = canvas.create_text(SCREEN_WIDTH/2, SCREEN_WIDTH/2,
+                                  fill='black',font='courier 80 bold', 
+                                  text=GAME_OVER_MSG)
+        text_frame = canvas.create_rectangle(canvas.bbox(text), 
+                                             fill='white', 
+                                             outline='white')
+        canvas.tag_lower(text_frame, text)
+
     else:
-      canvas.delete('all')
-      render_food(food)
-      render_snake(snake)
-      frame_updated = False
-      root.after(FRAME_RATE, game_loop)
+        canvas.delete('all')
+        render_food(food)
+        render_snake(snake)
+        frame_updated = False
+        root.after(FRAME_RATE, game_loop)
 
 def change_direction(event):
     global frame_updated
