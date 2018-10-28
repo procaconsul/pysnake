@@ -22,6 +22,12 @@ class Snake:
         self.body.append(coords)
         self.direction = Direction.EAST
         self.env_width = env_width
+    
+    def __len__(self):
+        return len(self.body)
+
+    def __getitem__(self, index):
+        return self.body[index]
 
     def change_direction(self, new_direction):
         if new_direction.value + self.direction.value:

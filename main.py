@@ -1,5 +1,6 @@
 import pdb
 import tkinter as tk
+from collections import namedtuple 
 
 from snake import Snake, Direction
 
@@ -22,10 +23,12 @@ KEY_MAPPINGS = {
 canvas = tk.Canvas(root, width=SCREEN_WIDTH, height=SCREEN_WIDTH)
 canvas.pack()
 
-snake = Snake((ENV_WIDTH / 2, ENV_WIDTH / 2), ENV_WIDTH)
+Point = namedtuple('Point', 'x, y')
+
+snake = Snake(Point(ENV_WIDTH / 2, ENV_WIDTH / 2), ENV_WIDTH)
 
 def render_snake(snake):
-    for x, y in snake.body:
+    for x, y in snake:
         coord_x, coord_y = x * TILE_WIDTH, y * TILE_WIDTH
         canvas.create_rectangle(coord_x, coord_y,
                                 coord_x + TILE_WIDTH,
