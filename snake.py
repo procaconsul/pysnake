@@ -7,11 +7,6 @@ class Snake:
         self.direction = 'east'
 
     def move(self):
-        if len(self.body) == 1:
-             # import code; code.interact(local=dict(globals(), **locals()))
-            (x, y) = self.body.pop()
-            self.body.append((x + 1, y))
-        else:
-            self.body.popleft()
-            (x, y) = self.body[-1]
-            self.body.append(x + 1, y)
+        tail = self.body.popleft()
+        x, y = self.body[-1] if len(self.body) else tail
+        self.body.append((x + 1, y))
