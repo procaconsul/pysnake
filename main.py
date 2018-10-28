@@ -40,8 +40,9 @@ def game_loop():
     root.after(FRAME_RATE, game_loop)
 
 def change_direction(event):
+    
     if event.keysym in KEY_MAPPINGS.keys():
-        snake.direction = KEY_MAPPINGS[event.keysym]
+        snake.change_direction(KEY_MAPPINGS[event.keysym])
 
 root.bind("<Key>", change_direction)
 

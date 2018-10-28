@@ -1,11 +1,13 @@
+import pdb
 from collections import deque
 from enum import Enum
 
 class Direction(Enum):
-    NORTH='north'
-    EAST='east'
-    SOUTH='south'
-    WEST='west'
+    NORTH = 1
+    EAST  = 2
+    SOUTH = -1
+    WEST  = -2
+
 
 DIRECTION_VECTOR = {
     Direction.NORTH: (0, -1),
@@ -20,6 +22,10 @@ class Snake:
         self.body.append(coords)
         self.direction = Direction.EAST
         self.env_width = env_width
+
+    def change_direction(self, new_direction):
+        if new_direction.value + self.direction.value:
+          self.direction = new_direction
 
     def move(self):
         tail = self.body.popleft()
