@@ -1,7 +1,7 @@
 import pdb
 import tkinter as tk
 
-from snake import Snake
+from snake import Snake, Direction
 
 root = tk.Tk()
 
@@ -11,6 +11,13 @@ FRAME_RATE = 250
 TILE_WIDTH = 25
 
 ENV_WIDTH = SCREEN_WIDTH / TILE_WIDTH
+
+KEY_MAPPINGS = {
+    "Up": Direction.NORTH,
+    "Down": Direction.SOUTH,
+    "Left": Direction.WEST,
+    "Right": Direction.EAST,
+}
 
 canvas = tk.Canvas(root, width=SCREEN_WIDTH, height=SCREEN_WIDTH)
 canvas.pack()
@@ -27,11 +34,16 @@ def render_snake(snake):
                                 outline="white")
 
 def game_loop():
-    # pdb.set_trace()
     snake.move()
     canvas.delete("all")
     render_snake(snake)
     root.after(FRAME_RATE, game_loop)
+
+def change_direction(event):
+    if event.keysym in KEY_MAPPINGS.keys():
+        snake.direction = KEY_MAPPINGS[event.keysym]
+
+root.bind("<Key>", change_direction)
 
 root.after(FRAME_RATE, game_loop)
 root.mainloop()

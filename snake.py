@@ -14,7 +14,6 @@ DIRECTION_VECTOR = {
     Direction.WEST: (-1, 0),
 }
 
-
 class Snake:
     def __init__(self, coords, env_width):
         self.body = deque()
@@ -28,5 +27,3 @@ class Snake:
         d_x, d_y = DIRECTION_VECTOR[self.direction]
         self.body.append(((x + d_x) % self.env_width,
                           (y + d_y) % self.env_width))
-       
-
