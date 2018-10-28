@@ -18,7 +18,14 @@ KEY_MAPPINGS = {
 
 root = tk.Tk()
 canvas = tk.Canvas(root, width=SCREEN_WIDTH, height=SCREEN_WIDTH)
+score_var = tk.StringVar()
+score_var.set("Score: 0")
+score_label = tk.Label(root,
+                       padx=15, pady=10,
+                       textvariable=score_var,
+                       font='courier 20 bold')
 canvas.pack()
+score_label.pack(side='right')
 
 def random_point():
     return Point(randint(0, ENV_WIDTH - 1), randint(0, ENV_WIDTH - 1))
@@ -31,7 +38,13 @@ def food_location(snake):
 
 snake = Snake(Point(ENV_WIDTH / 2, ENV_WIDTH / 2), ENV_WIDTH)
 food = food_location(snake)
+score = 0
 frame_updated = False
+
+def increment_score():
+    global score
+    score += 1
+    score_var.set(f"Score: {score}")
 
 def render_point(point, color):
   coord_x, coord_y = point.x * TILE_WIDTH, point.y * TILE_WIDTH
@@ -55,6 +68,7 @@ def game_loop():
     if food in snake:
       food = food_location(snake)
       snake.move(grow=True)
+      increment_score()
     else:
         snake.move()
 
