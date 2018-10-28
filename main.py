@@ -9,7 +9,7 @@ root = tk.Tk()
 
 SCREEN_WIDTH = 500
 
-FRAME_RATE = 250
+FRAME_RATE = 150
 TILE_WIDTH = 25
 
 ENV_WIDTH = SCREEN_WIDTH / TILE_WIDTH
@@ -35,6 +35,7 @@ def food_location(snake):
 
 snake = Snake(Point(ENV_WIDTH / 2, ENV_WIDTH / 2), ENV_WIDTH)
 food = food_location(snake)
+frame_updated = False
 
 def render_point(point, color):
   coord_x, coord_y = point.x * TILE_WIDTH, point.y * TILE_WIDTH
@@ -52,7 +53,7 @@ def render_snake(snake):
         render_point(point, 'black')
 
 def game_loop():
-    global food 
+    global frame_updated, food
     if food in snake:
       food = food_location(snake)
       snake.move(grow=True)
@@ -61,11 +62,14 @@ def game_loop():
     canvas.delete('all')
     render_food(food)
     render_snake(snake)
+    frame_updated = False
     root.after(FRAME_RATE, game_loop)
 
 def change_direction(event):
-    if event.keysym in KEY_MAPPINGS.keys():
+    global frame_updated
+    if event.keysym in KEY_MAPPINGS.keys() and not frame_updated:
         snake.change_direction(KEY_MAPPINGS[event.keysym])
+        frame_updated = True
 
 root.bind('<Key>', change_direction)
 

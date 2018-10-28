@@ -16,7 +16,7 @@ class Snake:
         self.body.append(coords)
         self.direction = Direction.EAST
         self.env_width = env_width
-    
+
     def __len__(self):
         return len(self.body)
 
