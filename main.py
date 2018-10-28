@@ -5,15 +5,12 @@ from random import randint
 from snake import Snake
 from utils import Direction, Point
 
-root = tk.Tk()
 
 SCREEN_WIDTH = 500
-
 FRAME_RATE = 150
 TILE_WIDTH = 25
-
+GAME_OVER_MSG='GAME OVER'
 ENV_WIDTH = SCREEN_WIDTH / TILE_WIDTH
-
 KEY_MAPPINGS = {
     'Up': Direction.NORTH,
     'Down': Direction.SOUTH,
@@ -21,6 +18,7 @@ KEY_MAPPINGS = {
     'Right': Direction.EAST,
 }
 
+root = tk.Tk()
 canvas = tk.Canvas(root, width=SCREEN_WIDTH, height=SCREEN_WIDTH)
 canvas.pack()
 
@@ -49,19 +47,22 @@ def render_food(food):
     render_point(food, 'red')
     
 def render_snake(snake):
-    for point in snake:
+    render_point(snake[-1], 'blue')
+    for point in snake[:-1]:
         render_point(point, 'black')
 
 def game_loop():
     global frame_updated, food
+
     if food in snake:
       food = food_location(snake)
       snake.move(grow=True)
     else:
         snake.move()
+        
     if snake[-1] in snake[:-1]:
       canvas.create_text(SCREEN_WIDTH/2, SCREEN_WIDTH/2,
-          fill='black',font='courier 80 bold', text='GAME OVER')
+          fill='black',font='courier 80 bold', text=GAME_OVER_MSG)
     else:
       canvas.delete('all')
       render_food(food)
