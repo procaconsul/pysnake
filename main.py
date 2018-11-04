@@ -46,16 +46,17 @@ def increment_score():
     score += 1
     score_var.set(f"Score: {score}")
 
-def render_point(point, color):
+def render_point(point, color, square=True):
     coord_x, coord_y = point.x * TILE_WIDTH, point.y * TILE_WIDTH
-    return canvas.create_rectangle(coord_x, coord_y,
-                                   coord_x + TILE_WIDTH,
-                                   coord_y + TILE_WIDTH,
-                                   fill=color,
-                                   outline='white')
+    renderer = canvas.create_rectangle if square else canvas.create_oval
+    return renderer(coord_x, coord_y,
+                    coord_x + TILE_WIDTH,
+                    coord_y + TILE_WIDTH,
+                    fill=color,
+                    outline='white')
 
 def render_food(food):
-    render_point(food, 'red')
+    render_point(food, 'red', square=False)
 
 def render_head(snake):
     if snake.next_position() == food or snake.head == food:
