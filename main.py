@@ -2,6 +2,7 @@ import tkinter as tk
 from random import randint
 
 from snake import Snake
+from renderer import SnakeRenderer, render_point
 from utils import Direction, Point
 
 SCREEN_WIDTH = 500
@@ -37,6 +38,7 @@ def food_location(snake):
     return food
 
 snake = Snake(Point(ENV_WIDTH / 2, ENV_WIDTH / 2), ENV_WIDTH)
+snake_renderer = SnakeRenderer(canvas, snake)
 food = food_location(snake)
 score = 0
 frame_updated = False
@@ -46,42 +48,33 @@ def increment_score():
     score += 1
     score_var.set(f"Score: {score}")
 
-def render_point(point, color, square=True):
-    coord_x, coord_y = point.x * TILE_WIDTH, point.y * TILE_WIDTH
-    renderer = canvas.create_rectangle if square else canvas.create_oval
-    return renderer(coord_x, coord_y,
-                    coord_x + TILE_WIDTH,
-                    coord_y + TILE_WIDTH,
-                    fill=color,
-                    outline='white')
-
 def render_food(food):
-    render_point(food, 'red', square=False)
+    render_point(canvas, food, 'red', square=False)
 
-def render_head(snake):
-    if snake.next_position() == food or snake.head == food:
-        x, y = snake.head
-        x, y = x * TILE_WIDTH, y * TILE_WIDTH
-        midpoint = [x + (TILE_WIDTH / 2), y + (TILE_WIDTH / 2)]
+# def render_head(snake):
+#     if snake.next_position() == food or snake.head == food:
+#         x, y = snake.head
+#         x, y = x * TILE_WIDTH, y * TILE_WIDTH
+#         midpoint = [x + (TILE_WIDTH / 2), y + (TILE_WIDTH / 2)]
 
-        bbox = [[x, y],
-                [x + TILE_WIDTH, y],
-                [x + TILE_WIDTH, y + TILE_WIDTH],
-                [x, y + TILE_WIDTH]]
+#         bbox = [[x, y],
+#                 [x + TILE_WIDTH, y],
+#                 [x + TILE_WIDTH, y + TILE_WIDTH],
+#                 [x, y + TILE_WIDTH]]
 
-        bbox.insert(snake.direction.value + 1, midpoint)
+#         bbox.insert(snake.direction.value + 1, midpoint)
 
-        bbox = [coord for point in bbox for coord in point]
+#         bbox = [coord for point in bbox for coord in point]
 
-        canvas.create_polygon(bbox, fill="blue", outline="white")
-    else:
-        render_point(snake.head, "blue")
+#         canvas.create_polygon(bbox, fill="blue", outline="white")
+#     else:
+#         render_point(snake.head, "blue")
 
-def render_snake(snake):
-    render_head(snake)
+# def render_snake(snake):
+#     render_head(snake)
 
-    for point in snake.tail:
-        render_point(point, 'black')
+#     for point in snake.tail:
+#         render_point(point, 'black')
 
 def game_loop():
     global frame_updated, food
@@ -95,16 +88,16 @@ def game_loop():
 
     if snake.head in snake.tail:
         text = canvas.create_text(SCREEN_WIDTH/2, SCREEN_WIDTH/2,
-                                  fill='black',font='courier 80 bold', 
+                                  fill='black',font='courier 80 bold',
                                   text=GAME_OVER_MSG)
-        text_frame = canvas.create_rectangle(canvas.bbox(text), 
-                                             fill='white', 
+        text_frame = canvas.create_rectangle(canvas.bbox(text),
+                                             fill='white',
                                              outline='white')
         canvas.tag_lower(text_frame, text)
     else:
         canvas.delete('all')
         render_food(food)
-        render_snake(snake)
+        snake_renderer.render()
         frame_updated = False
         root.after(FRAME_RATE, game_loop)
 
