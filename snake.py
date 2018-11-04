@@ -23,16 +23,24 @@ class Snake:
         return list(self.body)[index]
 
     def change_direction(self, new_direction):
-        if new_direction.value + self.direction.value:
+        if not self.direction.is_opposite(new_direction):
           self.direction = new_direction
 
     def move(self, grow=False):
-        tail = self.body[0] if grow else self.body.popleft()
-        x, y = self.body[-1] if len(self.body) else tail
-        d_x, d_y = DIRECTION_VECTOR[self.direction]
-        self.body.append(Point((x + d_x) % self.env_width,
-                          (y + d_y) % self.env_width))
+        new_head = self.next_position()
+        if not grow:
+            self.body.popleft()
+        self.body.append(new_head)
 
+    def next_position(self):
+        x, y = self.head
+        dx, dy = DIRECTION_VECTOR[self.direction]
+        return Point((x + dx) % self.env_width,
+                     (y + dy) % self.env_width)
+
+    @property
+    def head(self):
+        return self[-1]
 
     @property
     def tail(self):
