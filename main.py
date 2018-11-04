@@ -48,17 +48,37 @@ def increment_score():
 
 def render_point(point, color):
     coord_x, coord_y = point.x * TILE_WIDTH, point.y * TILE_WIDTH
-    canvas.create_rectangle(coord_x, coord_y,
-                            coord_x + TILE_WIDTH,
-                            coord_y + TILE_WIDTH,
-                            fill=color,
-                            outline='white')
+    return canvas.create_rectangle(coord_x, coord_y,
+                                   coord_x + TILE_WIDTH,
+                                   coord_y + TILE_WIDTH,
+                                   fill=color,
+                                   outline='white')
 
 def render_food(food):
     render_point(food, 'red')
 
+def render_head(snake):
+    if snake.next_position() == food or snake.head == food:
+        x, y = snake.head
+        x, y = x * TILE_WIDTH, y * TILE_WIDTH
+        midpoint = [x + (TILE_WIDTH / 2), y + (TILE_WIDTH / 2)]
+
+        bbox = [[x, y],
+                [x + TILE_WIDTH, y],
+                [x + TILE_WIDTH, y + TILE_WIDTH],
+                [x, y + TILE_WIDTH]]
+
+        bbox.insert(snake.direction.value + 1, midpoint)
+
+        bbox = [coord for point in bbox for coord in point]
+
+        canvas.create_polygon(bbox, fill="blue", outline="white")
+    else:
+        render_point(snake.head, "blue")
+
 def render_snake(snake):
-    render_point(snake[-1], 'blue')
+    render_head(snake)
+
     for point in snake.tail:
         render_point(point, 'black')
 
@@ -72,7 +92,7 @@ def game_loop():
     else:
         snake.move()
 
-    if snake[-1] in snake.tail:
+    if snake.head in snake.tail:
         text = canvas.create_text(SCREEN_WIDTH/2, SCREEN_WIDTH/2,
                                   fill='black',font='courier 80 bold', 
                                   text=GAME_OVER_MSG)
@@ -80,7 +100,6 @@ def game_loop():
                                              fill='white', 
                                              outline='white')
         canvas.tag_lower(text_frame, text)
-
     else:
         canvas.delete('all')
         render_food(food)
